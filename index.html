@@ -67,6 +67,22 @@
             transform: translateY(-2px);
         }
         
+        .region-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+        
         .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
@@ -82,7 +98,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        .redirecting {
+        .hidden {
             display: none;
         }
     </style>
@@ -95,35 +111,174 @@
             <h1>Pocket Guide Namibia</h1>
             <p>Get the complete travel guide for Namibia on your mobile device</p>
             
-            <div id="manual-links" style="display: none;">
+            <div id="region-info" class="region-info hidden">
+                <p>📍 Detected region: <span id="detected-region">Unknown</span></p>
+            </div>
+            
+            <div id="error-message" class="error-message hidden">
+                <p><strong>App not available in your region</strong></p>
+                <p>Unfortunately, this app may not be available in your App Store region. You can:</p>
+                <ul style="text-align: left; margin-top: 10px;">
+                    <li>Visit our website for the web version</li>
+                    <li>Contact us for alternative download options</li>
+                </ul>
+            </div>
+            
+            <div id="manual-links">
                 <a href="#" id="ios-link" class="download-btn">Download for iOS</a>
                 <a href="#" id="android-link" class="download-btn">Download for Android</a>
+                <a href="https://www.pocketguide-namibia.com" class="download-btn">Visit Website</a>
             </div>
         </div>
         
-        <div id="redirecting" class="redirecting">
+        <div id="loading" class="hidden">
             <div class="spinner"></div>
-            <p>Redirecting to app store...</p>
+            <p>Detecting your region...</p>
         </div>
     </div>
 
     <script>
-        // Configuration - Your actual app store URLs and website
+        // Configuration
         const APP_STORE_URLS = {
-            ios: 'https://apps.apple.com/app/pocket-guide-namibia/id646387049',
+            ios: 'https://apps.apple.com/app/id646387049',
             android: 'https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1',
             desktop: 'https://www.pocketguide-namibia.com'
         };
         
+        // Regions where the app is known to be available
+        const SUPPORTED_REGIONS = [
+            'US', 'CA', 'GB', 'AU', 'DE', 'FR', 'NL', 'ZA', 'NA', 'BW', 'ZW'
+            // Add more country codes as needed
+        ];
+        
+        let userRegion = null;
+        let regionData = null;
+        
+        // Method 1: Browser Language/Locale Detection
+        function detectRegionFromBrowser() {
+            const language = navigator.language || navigator.languages[0];
+            const locale = language.split('-')[1] || language.split('_')[1];
+            return locale ? locale.toUpperCase() : null;
+        }
+        
+        // Method 2: Timezone-based region detection
+        function detectRegionFromTimezone() {
+            try {
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const regionMap = {
+                    'America/New_York': 'US',
+                    'America/Los_Angeles': 'US',
+                    'America/Chicago': 'US',
+                    'America/Toronto': 'CA',
+                    'Europe/London': 'GB',
+                    'Europe/Berlin': 'DE',
+                    'Europe/Paris': 'FR',
+                    'Europe/Amsterdam': 'NL',
+                    'Australia/Sydney': 'AU',
+                    'Africa/Johannesburg': 'ZA',
+                    'Africa/Windhoek': 'NA',
+                    'Africa/Gaborone': 'BW',
+                    'Africa/Harare': 'ZW'
+                };
+                return regionMap[timezone] || null;
+            } catch (e) {
+                return null;
+            }
+        }
+        
+        // Method 3: IP-based detection (using a free service)
+        async function detectRegionFromIP() {
+            try {
+                const response = await fetch('https://ipapi.co/json/', {
+                    timeout: 3000
+                });
+                const data = await response.json();
+                return {
+                    country: data.country_code,
+                    countryName: data.country_name,
+                    city: data.city,
+                    timezone: data.timezone
+                };
+            } catch (e) {
+                console.log('IP detection failed:', e);
+                return null;
+            }
+        }
+        
+        // Combine all detection methods
+        async function detectUserRegion() {
+            document.getElementById('loading').classList.remove('hidden');
+            
+            // Try browser detection first (fastest)
+            const browserRegion = detectRegionFromBrowser();
+            const timezoneRegion = detectRegionFromTimezone();
+            
+            // Try IP detection for more accuracy
+            const ipData = await detectRegionFromIP();
+            
+            // Determine the most likely region
+            userRegion = ipData?.country || timezoneRegion || browserRegion || 'Unknown';
+            regionData = ipData;
+            
+            document.getElementById('loading').classList.add('hidden');
+            updateUI();
+        }
+        
+        function updateUI() {
+            // Show region info
+            const regionInfo = document.getElementById('region-info');
+            const detectedRegion = document.getElementById('detected-region');
+            
+            if (regionData) {
+                detectedRegion.textContent = ⁠ ${regionData.countryName || userRegion} (${userRegion}) ⁠;
+            } else {
+                detectedRegion.textContent = userRegion;
+            }
+            regionInfo.classList.remove('hidden');
+            
+            // Check if app is supported in this region
+            const isSupported = SUPPORTED_REGIONS.includes(userRegion);
+            
+            if (!isSupported && userRegion !== 'Unknown') {
+                document.getElementById('error-message').classList.remove('hidden');
+            }
+            
+            // Set up download links
+            setupDownloadLinks(isSupported);
+        }
+        
+        function setupDownloadLinks(isSupported) {
+            const iosLink = document.getElementById('ios-link');
+            const androidLink = document.getElementById('android-link');
+            
+            if (isSupported || userRegion === 'Unknown') {
+                // Normal app store links
+                iosLink.href = APP_STORE_URLS.ios;
+                androidLink.href = APP_STORE_URLS.android;
+            } else {
+                // Show warning and still provide links (user might have different region account)
+                iosLink.href = APP_STORE_URLS.ios;
+                androidLink.href = APP_STORE_URLS.android;
+                iosLink.onclick = (e) => {
+                    if (!confirm('This app may not be available in your region. Continue to App Store?')) {
+                        e.preventDefault();
+                    }
+                };
+                androidLink.onclick = (e) => {
+                    if (!confirm('This app may not be available in your region. Continue to Play Store?')) {
+                        e.preventDefault();
+                    }
+                };
+            }
+        }
+        
         function detectDevice() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             
-            // iOS detection
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                 return 'ios';
             }
             
-            // Android detection
             if (/android/i.test(userAgent)) {
                 return 'android';
             }
@@ -131,45 +286,26 @@
             return 'unknown';
         }
         
-        function redirectToStore(device) {
-            const url = APP_STORE_URLS[device];
-            if (url) {
-                // Immediate redirect
-                window.location.href = url;
-            } else {
-                // Fallback to iOS if device not recognized
-                window.location.href = APP_STORE_URLS.ios;
-            }
-        }
-        
-        function showManualLinks() {
-            // Set up manual download links
-            document.getElementById('ios-link').href = APP_STORE_URLS.ios;
-            document.getElementById('android-link').href = APP_STORE_URLS.android;
-            document.getElementById('manual-links').style.display = 'block';
-        }
-        
-        // Main logic - immediate redirect
-        window.onload = function() {
+        // Initialize the app
+        window.onload = async function() {
+            await detectUserRegion();
+            
             const device = detectDevice();
             
-            if (device === 'unknown') {
-                // For desktop, redirect to main website
-                window.location.href = APP_STORE_URLS.desktop;
-            } else {
-                // Auto-redirect for mobile devices
-                redirectToStore(device);
+            // For mobile devices, you could still auto-redirect after showing region info
+            // Uncomment the following lines if you want auto-redirect behavior:
+            /*
+            if (device !== 'unknown' && SUPPORTED_REGIONS.includes(userRegion)) {
+                setTimeout(() => {
+                    if (device === 'ios') {
+                        window.location.href = APP_STORE_URLS.ios;
+                    } else if (device === 'android') {
+                        window.location.href = APP_STORE_URLS.android;
+                    }
+                }, 2000); // Wait 2 seconds to show region info first
             }
+            */
         };
-        
-        // Fallback: if redirect doesn't work, show manual links after 3 seconds
-        setTimeout(() => {
-            if (document.getElementById('redirecting').style.display === 'block') {
-                document.getElementById('content').style.display = 'block';
-                document.getElementById('redirecting').style.display = 'none';
-                showManualLinks();
-            }
-        }, 3000);
     </script>
 </body>
 </html>
