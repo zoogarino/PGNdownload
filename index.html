@@ -111,29 +111,19 @@
             <h1>Pocket Guide Namibia</h1>
             <p>Get the complete travel guide for Namibia on your mobile device</p>
             
-            <div id="region-info" class="region-info hidden">
-                <p>📍 Detected region: <span id="detected-region">Unknown</span></p>
+            <div id="redirect-message">
+                <div class="spinner"></div>
+                <p>Redirecting to app store...</p>
+                <p style="font-size: 14px; opacity: 0.8; margin-top: 15px;">
+                    If you're not redirected automatically, use the links below:
+                </p>
             </div>
             
-            <div id="error-message" class="error-message hidden">
-                <p><strong>App not available in your region</strong></p>
-                <p>Unfortunately, this app may not be available in your App Store region. You can:</p>
-                <ul style="text-align: left; margin-top: 10px;">
-                    <li>Visit our website for the web version</li>
-                    <li>Contact us for alternative download options</li>
-                </ul>
-            </div>
-            
-            <div id="manual-links">
-                <a href="#" id="ios-link" class="download-btn">Download for iOS</a>
-                <a href="#" id="android-link" class="download-btn">Download for Android</a>
+            <div id="manual-links" style="margin-top: 20px;">
+                <a href="https://apps.apple.com/app/id646387049" class="download-btn">Download for iOS</a>
+                <a href="https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1" class="download-btn">Download for Android</a>
                 <a href="https://www.pocketguide-namibia.com" class="download-btn">Visit Website</a>
             </div>
-        </div>
-        
-        <div id="loading" class="hidden">
-            <div class="spinner"></div>
-            <p>Detecting your region...</p>
         </div>
     </div>
 
@@ -287,24 +277,29 @@
         }
         
         // Initialize the app
-        window.onload = async function() {
-            await detectUserRegion();
-            
+        window.onload = function() {
             const device = detectDevice();
             
-            // For mobile devices, you could still auto-redirect after showing region info
-            // Uncomment the following lines if you want auto-redirect behavior:
-            /*
-            if (device !== 'unknown' && SUPPORTED_REGIONS.includes(userRegion)) {
-                setTimeout(() => {
-                    if (device === 'ios') {
-                        window.location.href = APP_STORE_URLS.ios;
-                    } else if (device === 'android') {
-                        window.location.href = APP_STORE_URLS.android;
-                    }
-                }, 2000); // Wait 2 seconds to show region info first
-            }
-            */
+            // Show loading message briefly
+            document.getElementById('redirect-message').style.display = 'block';
+            
+            // Small delay to show the redirect message, then redirect
+            setTimeout(() => {
+                if (device === 'ios') {
+                    window.location.href = APP_STORE_URLS.ios;
+                } else if (device === 'android') {
+                    window.location.href = APP_STORE_URLS.android;
+                } else {
+                    // Desktop users go to website
+                    window.location.href = APP_STORE_URLS.desktop;
+                }
+            }, 1000); // 1 second delay to show the message
+            
+            // Fallback: if redirect doesn't work, show manual links after 4 seconds
+            setTimeout(() => {
+                document.getElementById('redirect-message').style.display = 'none';
+                document.getElementById('manual-links').style.display = 'block';
+            }, 4000);
         };
     </script>
 </body>
