@@ -11,18 +11,120 @@
         const language = navigator.language || navigator.languages?.[0] || '';
         const region = language.split('-')[1]?.toUpperCase() || '';
         
-        // iOS App Store regional URLs
+        // iOS App Store regional URLs - comprehensive coverage
         const iosUrls = {
-            'US': 'https://apps.apple.com/us/app/pocket-guide-namibia/id6463870493',
-            'CA': 'https://apps.apple.com/ca/app/pocket-guide-namibia/id6463870493',
-            'GB': 'https://apps.apple.com/gb/app/pocket-guide-namibia/id6463870493',
-            'AU': 'https://apps.apple.com/au/app/pocket-guide-namibia/id6463870493',
-            'DE': 'https://apps.apple.com/de/app/pocket-guide-namibia/id6463870493',
-            'FR': 'https://apps.apple.com/fr/app/pocket-guide-namibia/id6463870493',
-            'NL': 'https://apps.apple.com/nl/app/pocket-guide-namibia/id6463870493',
-            'ZA': 'https://apps.apple.com/za/app/pocket-guide-namibia/id6463870493',
-            'NA': 'https://apps.apple.com/za/app/pocket-guide-namibia/id6463870493', // Namibia uses ZA store
-            'BW': 'https://apps.apple.com/za/app/pocket-guide-namibia/id6463870493'  // Botswana uses ZA store
+            // Major English-speaking markets
+            'US': 'https://apps.apple.com/us/app/id6463870493',
+            'CA': 'https://apps.apple.com/ca/app/id6463870493',
+            'GB': 'https://apps.apple.com/gb/app/id6463870493',
+            'AU': 'https://apps.apple.com/au/app/id6463870493',
+            'NZ': 'https://apps.apple.com/nz/app/id6463870493',
+            'IE': 'https://apps.apple.com/ie/app/id6463870493',
+            
+            // European markets
+            'DE': 'https://apps.apple.com/de/app/id6463870493',
+            'FR': 'https://apps.apple.com/fr/app/id6463870493',
+            'ES': 'https://apps.apple.com/es/app/id6463870493',
+            'IT': 'https://apps.apple.com/it/app/id6463870493',
+            'NL': 'https://apps.apple.com/nl/app/id6463870493',
+            'BE': 'https://apps.apple.com/be/app/id6463870493',
+            'CH': 'https://apps.apple.com/ch/app/id6463870493',
+            'AT': 'https://apps.apple.com/at/app/id6463870493',
+            'SE': 'https://apps.apple.com/se/app/id6463870493',
+            'NO': 'https://apps.apple.com/no/app/id6463870493',
+            'DK': 'https://apps.apple.com/dk/app/id6463870493',
+            'FI': 'https://apps.apple.com/fi/app/id6463870493',
+            'PT': 'https://apps.apple.com/pt/app/id6463870493',
+            'PL': 'https://apps.apple.com/pl/app/id6463870493',
+            'CZ': 'https://apps.apple.com/cz/app/id6463870493',
+            'HU': 'https://apps.apple.com/hu/app/id6463870493',
+            'GR': 'https://apps.apple.com/gr/app/id6463870493',
+            'RO': 'https://apps.apple.com/ro/app/id6463870493',
+            'BG': 'https://apps.apple.com/bg/app/id6463870493',
+            'HR': 'https://apps.apple.com/hr/app/id6463870493',
+            'SI': 'https://apps.apple.com/si/app/id6463870493',
+            'SK': 'https://apps.apple.com/sk/app/id6463870493',
+            'EE': 'https://apps.apple.com/ee/app/id6463870493',
+            'LV': 'https://apps.apple.com/lv/app/id6463870493',
+            'LT': 'https://apps.apple.com/lt/app/id6463870493',
+            'LU': 'https://apps.apple.com/lu/app/id6463870493',
+            'MT': 'https://apps.apple.com/mt/app/id6463870493',
+            'CY': 'https://apps.apple.com/cy/app/id6463870493',
+            
+            // Asian markets
+            'JP': 'https://apps.apple.com/jp/app/id6463870493',
+            'KR': 'https://apps.apple.com/kr/app/id6463870493',
+            'CN': 'https://apps.apple.com/cn/app/id6463870493',
+            'HK': 'https://apps.apple.com/hk/app/id6463870493',
+            'TW': 'https://apps.apple.com/tw/app/id6463870493',
+            'SG': 'https://apps.apple.com/sg/app/id6463870493',
+            'MY': 'https://apps.apple.com/my/app/id6463870493',
+            'TH': 'https://apps.apple.com/th/app/id6463870493',
+            'VN': 'https://apps.apple.com/vn/app/id6463870493',
+            'PH': 'https://apps.apple.com/ph/app/id6463870493',
+            'ID': 'https://apps.apple.com/id/app/id6463870493',
+            'IN': 'https://apps.apple.com/in/app/id6463870493',
+            'PK': 'https://apps.apple.com/pk/app/id6463870493',
+            'BD': 'https://apps.apple.com/bd/app/id6463870493',
+            'LK': 'https://apps.apple.com/lk/app/id6463870493',
+            
+            // Middle East & Africa
+            'AE': 'https://apps.apple.com/ae/app/id6463870493',
+            'SA': 'https://apps.apple.com/sa/app/id6463870493',
+            'QA': 'https://apps.apple.com/qa/app/id6463870493',
+            'KW': 'https://apps.apple.com/kw/app/id6463870493',
+            'BH': 'https://apps.apple.com/bh/app/id6463870493',
+            'OM': 'https://apps.apple.com/om/app/id6463870493',
+            'JO': 'https://apps.apple.com/jo/app/id6463870493',
+            'LB': 'https://apps.apple.com/lb/app/id6463870493',
+            'IL': 'https://apps.apple.com/il/app/id6463870493',
+            'TR': 'https://apps.apple.com/tr/app/id6463870493',
+            'EG': 'https://apps.apple.com/eg/app/id6463870493',
+            'ZA': 'https://apps.apple.com/za/app/id6463870493',
+            'NG': 'https://apps.apple.com/ng/app/id6463870493',
+            'KE': 'https://apps.apple.com/ke/app/id6463870493',
+            'GH': 'https://apps.apple.com/gh/app/id6463870493',
+            'UG': 'https://apps.apple.com/ug/app/id6463870493',
+            'TZ': 'https://apps.apple.com/tz/app/id6463870493',
+            'ZW': 'https://apps.apple.com/zw/app/id6463870493',
+            'NA': 'https://apps.apple.com/za/app/id6463870493', // Namibia uses ZA store
+            'BW': 'https://apps.apple.com/za/app/id6463870493', // Botswana uses ZA store
+            'ZM': 'https://apps.apple.com/za/app/id6463870493', // Zambia uses ZA store
+            
+            // Americas
+            'MX': 'https://apps.apple.com/mx/app/id6463870493',
+            'BR': 'https://apps.apple.com/br/app/id6463870493',
+            'AR': 'https://apps.apple.com/ar/app/id6463870493',
+            'CL': 'https://apps.apple.com/cl/app/id6463870493',
+            'CO': 'https://apps.apple.com/co/app/id6463870493',
+            'PE': 'https://apps.apple.com/pe/app/id6463870493',
+            'VE': 'https://apps.apple.com/ve/app/id6463870493',
+            'UY': 'https://apps.apple.com/uy/app/id6463870493',
+            'EC': 'https://apps.apple.com/ec/app/id6463870493',
+            'BO': 'https://apps.apple.com/bo/app/id6463870493',
+            'PY': 'https://apps.apple.com/py/app/id6463870493',
+            'CR': 'https://apps.apple.com/cr/app/id6463870493',
+            'GT': 'https://apps.apple.com/gt/app/id6463870493',
+            'PA': 'https://apps.apple.com/pa/app/id6463870493',
+            'SV': 'https://apps.apple.com/sv/app/id6463870493',
+            'HN': 'https://apps.apple.com/hn/app/id6463870493',
+            'NI': 'https://apps.apple.com/ni/app/id6463870493',
+            'DO': 'https://apps.apple.com/do/app/id6463870493',
+            'JM': 'https://apps.apple.com/jm/app/id6463870493',
+            'TT': 'https://apps.apple.com/tt/app/id6463870493',
+            'BB': 'https://apps.apple.com/bb/app/id6463870493',
+            
+            // Additional markets
+            'RU': 'https://apps.apple.com/ru/app/id6463870493',
+            'UA': 'https://apps.apple.com/ua/app/id6463870493',
+            'BY': 'https://apps.apple.com/by/app/id6463870493',
+            'KZ': 'https://apps.apple.com/kz/app/id6463870493',
+            'UZ': 'https://apps.apple.com/uz/app/id6463870493',
+            'AM': 'https://apps.apple.com/am/app/id6463870493',
+            'AZ': 'https://apps.apple.com/az/app/id6463870493',
+            'GE': 'https://apps.apple.com/ge/app/id6463870493',
+            'MD': 'https://apps.apple.com/md/app/id6463870493',
+            'IS': 'https://apps.apple.com/is/app/id6463870493'
         };
         
         const androidUrl = 'https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1';
@@ -31,7 +133,7 @@
         console.log('Detected region:', region);
         
         if (/iPad|iPhone|iPod/.test(userAgent)) {
-            const iosUrl = iosUrls[region] || 'https://apps.apple.com/app/id646387049';
+            const iosUrl = iosUrls[region] || 'https://apps.apple.com/app/id6463870493';
             console.log('iOS redirect:', iosUrl);
             location.href = iosUrl;
         } else if (/android/i.test(userAgent)) {
