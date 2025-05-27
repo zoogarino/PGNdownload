@@ -108,10 +108,11 @@
     </div>
 
     <script>
-        // Configuration - Your actual app store URLs
+        // Configuration - Your actual app store URLs and website
         const APP_STORE_URLS = {
             ios: 'https://apps.apple.com/gb/app/pocket-guide-namibia/id646387049',
-            android: 'https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1'
+            android: 'https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1',
+            desktop: 'https://www.pocketguide-namibia.com'
         };
         
         function detectDevice() {
@@ -133,16 +134,11 @@
         function redirectToStore(device) {
             const url = APP_STORE_URLS[device];
             if (url) {
-                // Show redirecting message
-                document.getElementById('content').style.display = 'none';
-                document.getElementById('redirecting').style.display = 'block';
-                
-                // Redirect after a short delay
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 1500);
+                // Immediate redirect
+                window.location.href = url;
             } else {
-                showManualLinks();
+                // Fallback to iOS if device not recognized
+                window.location.href = APP_STORE_URLS.ios;
             }
         }
         
@@ -153,13 +149,13 @@
             document.getElementById('manual-links').style.display = 'block';
         }
         
-        // Main logic
+        // Main logic - immediate redirect
         window.onload = function() {
             const device = detectDevice();
             
             if (device === 'unknown') {
-                // Show manual links for desktop/unknown devices
-                showManualLinks();
+                // For desktop, redirect to main website
+                window.location.href = APP_STORE_URLS.desktop;
             } else {
                 // Auto-redirect for mobile devices
                 redirectToStore(device);
