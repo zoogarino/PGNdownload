@@ -8,14 +8,31 @@
 <body>
     <script>
         const userAgent = navigator.userAgent;
-        const region = (navigator.language || '').split('-')[1] || '';
-        const iosUrl = 'https://apps.apple.com/app/id646387049';
+        const language = navigator.language || navigator.languages?.[0] || '';
+        const region = language.split('-')[1]?.toUpperCase() || '';
+        
+        // iOS App Store regional URLs
+        const iosUrls = {
+            'US': 'https://apps.apple.com/us/app/id646387049',
+            'CA': 'https://apps.apple.com/ca/app/id646387049',
+            'GB': 'https://apps.apple.com/gb/app/id646387049',
+            'AU': 'https://apps.apple.com/au/app/id646387049',
+            'DE': 'https://apps.apple.com/de/app/id646387049',
+            'FR': 'https://apps.apple.com/fr/app/id646387049',
+            'NL': 'https://apps.apple.com/nl/app/id646387049',
+            'ZA': 'https://apps.apple.com/za/app/id646387049',
+            'NA': 'https://apps.apple.com/za/app/id646387049', // Namibia uses ZA store
+            'BW': 'https://apps.apple.com/za/app/id646387049'  // Botswana uses ZA store
+        };
+        
         const androidUrl = 'https://play.google.com/store/apps/details?id=com.sd.namibia&pli=1';
         const websiteUrl = 'https://www.pocketguide-namibia.com';
         
         console.log('Detected region:', region);
         
         if (/iPad|iPhone|iPod/.test(userAgent)) {
+            const iosUrl = iosUrls[region] || 'https://apps.apple.com/app/id646387049';
+            console.log('iOS redirect:', iosUrl);
             location.href = iosUrl;
         } else if (/android/i.test(userAgent)) {
             location.href = androidUrl;
