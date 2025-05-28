@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- Google Analytics 4 tracking code -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV1MY6GNZF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KV1MY6GNZF');
-  </script>
-  
-  <title>Your Page Title</title>
-</head>
-<body>
-  <!-- Your page content -->
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pocket Guide Namibia</title>
+    
+    <!-- Google Analytics 4 tracking code -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV1MY6GNZF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KV1MY6GNZF');
+    </script>
 </head>
 <body>
+    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>Pocket Guide Namibia</h1>
+        <p>Redirecting you to the app...</p>
+        <div style="margin: 20px;">
+            <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; animation: spin 2s linear infinite;"></div>
+        </div>
+    </div>
+    
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
     <script>
         const userAgent = navigator.userAgent;
         const language = navigator.language || navigator.languages?.[0] || '';
@@ -150,15 +156,18 @@
         
         console.log('Detected region:', region);
         
-        if (/iPad|iPhone|iPod/.test(userAgent)) {
-            const iosUrl = iosUrls[region] || 'https://apps.apple.com/app/id6463870493';
-            console.log('iOS redirect:', iosUrl);
-            location.href = iosUrl;
-        } else if (/android/i.test(userAgent)) {
-            location.href = androidUrl;
-        } else {
-            location.href = websiteUrl;
-        }
+        // Add delay to allow Google Analytics to track the visit
+        setTimeout(function() {
+            if (/iPad|iPhone|iPod/.test(userAgent)) {
+                const iosUrl = iosUrls[region] || 'https://apps.apple.com/app/id6463870493';
+                console.log('iOS redirect:', iosUrl);
+                location.href = iosUrl;
+            } else if (/android/i.test(userAgent)) {
+                location.href = androidUrl;
+            } else {
+                location.href = websiteUrl;
+            }
+        }, 1000); // 1 second delay to allow analytics to load
     </script>
 </body>
 </html>
